@@ -1,12 +1,12 @@
-import {Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, OneToMany} from "typeorm"
+import {Entity, PrimaryGeneratedColumn, Column, OneToMany} from "typeorm"
 import { Sensor } from "./sensor.entity";
 
 @Entity("stations")
 export class Station{
-    @PrimaryGeneratedColumn("increment")
-    id: number;
+    @PrimaryGeneratedColumn("uuid")
+    id: string;
 
-    @Column({ type: "varchar", length: 50 })
+    @Column({ type: "varchar", length: 50, unique: true })
     name: string;
   
     @Column({ type: "varchar", length: 50})
@@ -16,5 +16,5 @@ export class Station{
     is_active: boolean;
 
     @OneToMany(() => Sensor, (sensor) => sensor.station)
-    sensor: Sensor[];
+    sensors: Sensor[];
 }

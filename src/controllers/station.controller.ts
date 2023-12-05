@@ -1,10 +1,8 @@
 import { Request, Response } from "express";
 import { Station } from "../entities/station.entity";
-import { tStationRequest, tStationResponse, tStationUpdateRequest } from "../interfaces/station.interface";
+import { tStation, tStationRequest, tStationResponse, tStationsResponse } from "../interfaces/station.interface";
 import { createStationService } from "../services/station/create";
-import { getStationService } from "../services/station/get";
-import { deleteStationService } from "../services/station/delete";
-import { updateStationService } from "../services/station/update";
+import { getAllStationsService, getStationService } from "../services/station/get";
 
 export const createStationController = async (req: Request, res: Response): Promise<Response<Station>> => {
     const stationData: tStationRequest = req.body
@@ -13,33 +11,15 @@ export const createStationController = async (req: Request, res: Response): Prom
     return res.status(201).json(stationResponse)
 }
 
-export const getStationController = async (req: Request, res: Response): Promise<Response<Station>> =>{
-    const stationId: number = parseInt(req.params.id)
+export const getStationController = async (req: Request, res: Response): Promise<Response<Station>> => {
+    const stationName: string = req.params.name
 
-    const station: tStationResponse = await getStationService(stationId)
+    const station: tStation = await getStationService(stationName)
 
     return res.status(200).json(station)
 }
 
-export const deleteStationController = async (req:Request, res:Response): Promise<Response<Station>> => {
-    const stationId: number = parseInt(req.params.id)
-
-    await deleteStationService(stationId)
-
-    return res.status(204).send()
+export const getAllStationsController = async (req: Request, res: Response): Promise<Response<Station>> => {
+  const stations: tStationsResponse = await getAllStationsService()
+  return res.status(200).json(stations)
 }
-
-export const updateStationController = async (
-    req: Request,
-    res: Response
-  ): Promise<Response<Station>> => {
-    const stationId: number = parseInt(req.params.id);
-    const newStationData: tStationUpdateRequest = req.body;
-  
-    const updatedStation: tStationUpdateRequest = await updateStationService(
-      stationId,
-      newStationData
-    );
-  
-    return res.status(200).json(updatedStation);
-  };

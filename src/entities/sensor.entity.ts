@@ -3,19 +3,19 @@ import { Station } from "./station.entity";
 
 @Entity("sensors")
 export class Sensor{
-    @PrimaryGeneratedColumn("increment")
-    id: number;
+    @PrimaryGeneratedColumn("uuid")
+    id: string;
 
     @Column({ type: "varchar", length: 50 })
     name: string;
   
-    @Column({ type: "float"})
-    value: number;
+    @Column({ type: "varchar", length: 50})
+    value: string;
   
-    @CreateDateColumn({ type: "date" })
-    createdAt: Date | string;
+    @CreateDateColumn({ type: "timestamp without time zone"})
+    createdAt: Date;
 
-    @ManyToOne(() => Station, (station) => station.sensor, {onDelete: "CASCADE"})
-    @JoinColumn()
+    @ManyToOne(() => Station, (station) => station.sensors, {onDelete: "CASCADE"})
+    @JoinColumn({name: "stationName"})
     station: Station;
 }

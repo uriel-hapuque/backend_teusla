@@ -8,11 +8,11 @@ export const verifyIfStationExists = async (
   res: Response,
   next: NextFunction
 ): Promise<void> => {
-  const stationId: number = parseInt(req.params.id);
+  const stationName: string = req.params.name;
 
   const stationRepo: Repository<Station> = AppDataSource.getRepository(Station);
 
-  const station: Station | null = await stationRepo.findOneBy({ id: stationId });
+  const station: Station | null = await stationRepo.findOneBy({ name:stationName });
 
   if (!station) {
     throw new AppError("Estação não encontrada", 404);

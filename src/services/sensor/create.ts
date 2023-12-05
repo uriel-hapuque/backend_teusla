@@ -7,21 +7,24 @@ import { AppError } from "../../error";
 
 export const createSensorService = async (
   sensorData: tSensorRequest,
-  stationId: number
+  stationName: string
 ): Promise<Sensor | Sensor[] | any> => {
+
   const sensorRepo: Repository<Sensor> = AppDataSource.getRepository(Sensor);
 
   const stationRepo: Repository<Station> = AppDataSource.getRepository(Station);
 
-  const station: any = await stationRepo.findOneBy({ id: stationId });
+  const station: any = await stationRepo.findOneBy({ name: stationName });
 
   if (!station) {
     throw new AppError("Estação não encontrada", 404);
   }
 
-  const sensor = sensorRepo.create({ ...sensorData, station: station.id });
+  const sensor = sensorRepo.create({ ...sensorData, station: station });
 
-  await sensorRepo.save(sensor);
+  const returnSensor = await sensorRepo.save(sensor);
+
+  console.log({value: returnSensor.value, createdAt :returnSensor.createdAt})
 
   return sensor;
 };

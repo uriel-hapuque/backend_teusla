@@ -1,16 +1,24 @@
 import {z} from "zod"
+import { sensorSchema, sensorsSchema } from "./sensor.schema"
 
 export const stationSchema = z.object({
-    id: z.number(),
+    id: z.string(),
     name: z.string().max(50),
     localization: z.string().max(50),
-    is_active: z.boolean()
+    is_active: z.boolean(),
+    sensors: z.array(sensorSchema)
 }) 
 
-export const stationResquestSchema = stationSchema.omit({id: true})
+export const stationSchemaTest = z.object({
+    id: z.string(),
+    name: z.string().max(50),
+    localization: z.string().max(50),
+    is_active: z.boolean(),
+    sensors: z.any()
+}) 
 
-export const stationUpdateRequestSchema = stationResquestSchema
+export const stationResquestSchema = stationSchema.omit({id: true, sensors: true})
 
 export const stationResponseSchema = stationResquestSchema
 
-export const stationsResponseSchema = stationResponseSchema.array()
+export const stationsResponseSchema = stationSchema.array()

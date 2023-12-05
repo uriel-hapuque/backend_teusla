@@ -1,13 +1,10 @@
 import { Router } from "express";
-import { validateRequestBody } from "../middlewares/validate/validateBody";
-import { stationResquestSchema } from "../schemas/station.schema";
-import { createStationController, deleteStationController, getStationController, updateStationController } from "../controllers/station.controller";
-import { verifyIfStationExists } from "../middlewares/verify/verifyIfExistsById";
+import { createStationController, getAllStationsController, getStationController } from "../controllers/station.controller";
+import { verifyIfStationExists } from "../middlewares/verify/verifyIfExistsByName";
 
 
 export const stationRoutes: Router = Router()
 
-stationRoutes.post("", validateRequestBody(stationResquestSchema), createStationController)
-stationRoutes.get("/:id", verifyIfStationExists, getStationController)
-stationRoutes.delete("/:id", verifyIfStationExists, deleteStationController)
-stationRoutes.patch("/:id", verifyIfStationExists, updateStationController)
+stationRoutes.post("", createStationController)
+stationRoutes.get("/:name", verifyIfStationExists, getStationController)
+stationRoutes.get("", getAllStationsController)
