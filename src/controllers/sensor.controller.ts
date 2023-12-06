@@ -11,7 +11,13 @@ export const createSensorController = async (req: Request, res: Response): Promi
     const field3: any = req.query.field3
     const field4: any = req.query.field4
     const field5: any = req.query.field5
-    const field6: any = req.query.field6
+    let field6: any = req.query.field6
+
+    if(field6 === "Não está chovendo"){
+      field6 = "false"
+    } else if("Esta chovendo"){
+      field6 = "true"
+    }
 
     const fieldList = [
       {name: "moisture", value: field1}, 

@@ -49,7 +49,7 @@ export const getAllStationsService = async (): Promise<tStation[]> =>{
   const stationRepo: Repository<Station> = AppDataSource.getRepository(Station);
   const stations: Station[] = await stationRepo.find({relations: ["sensors"]})
 
-   const transformedData = stations.map((station: any) => {
+   const transformedData = stations.map((station: Station) => {
     const { id, name, localization, is_active, sensors } = station;
 
     const transformedSensors = sensors.reduce((acc:any, sensor:any) => {

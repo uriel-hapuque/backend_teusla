@@ -9,7 +9,7 @@ export const getSensorService = async (
   const sensorRepo: Repository<Sensor> = AppDataSource.getRepository(Sensor);
 
   const skip: number = 0;
-  const take: number = 5;
+  const take: number = 86400;
 
   const sensors: tSensor[] = await sensorRepo.find({where: {name: sensorName},
     order: {
@@ -20,15 +20,20 @@ export const getSensorService = async (
   });
 
   const returnList: tSensorDTO[] = []
+  let values: number[] = []
   
   sensors.forEach((sensor: tSensor)=>{
-    const {value, createdAt, ...sensorWithoutValues} = sensor
-    const newSensorValues: tSensorDTO = {...sensorWithoutValues, "allValues": {
-      value: value, 
-      createdAt: createdAt
-    }}
 
-    
+    const {value, createdAt, ...sensorWithoutValues} = sensor
+    const newSensorValues = {
+      ...sensorWithoutValues, 
+      "allValues": {
+        value: value, 
+        createdAt: createdAt
+      }, 
+      
+    }
+    values.push(parseInt(value))
     returnList.push(newSensorValues)
   });
 
@@ -37,8 +42,19 @@ export const getSensorService = async (
       obj.allValues.value = JSON.parse(obj.allValues.value)
     }
   })
+
+  const sum: number = values.reduce((acumulador, elemento) => acumulador + elemento, 0);
+
+  const data: any = {
+    average: (sum/values.length),
+    highest: Math.max.apply(null, values), 
+    lower: Math.min.apply(null, values)
+  }
   
-  return returnList;
+  return [
+    ...returnList,
+    data
+  ]
 };
 
 export const getAllSensorsService = async (): Promise<Sensor[] | null> => {
