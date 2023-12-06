@@ -1,13 +1,14 @@
+import { Repository } from "typeorm";
 import app from "./app"
 import { AppDataSource } from "./data-source";
-import { tStationsResponse } from "./interfaces/station.interface";
 import { createStationService } from "./services/station/create";
-import { getAllStationsService } from "./services/station/get";
+import { Station } from "./entities/station.entity";
 
 AppDataSource.initialize()
   .then(async () => {
     console.log("Server está rodando");
-    const stations: tStationsResponse = await getAllStationsService()
+    const stationRepo: Repository<Station> = AppDataSource.getRepository(Station);
+    const stations: Station[] | any = await stationRepo.find({relations: ["sensors"]})
     if(stations.length <= 0){
       createStationService({
         name: "Estação 1",

@@ -1,4 +1,4 @@
-import {  z } from "zod";
+import { z } from "zod";
 
 export const sensorSchema = z.object({
   id: z.string(),
@@ -15,7 +15,7 @@ export const Datas = z.object({
 export const sensorDTO = z.object({
   id: z.string(),
   name: z.string().max(50),
-  allValues: z.object({Datas})
+  allValues: Datas
 })
 
 export const sensorsSchema = z.object({

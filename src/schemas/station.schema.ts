@@ -1,5 +1,5 @@
-import {z} from "zod"
-import { sensorSchema, sensorsSchema } from "./sensor.schema"
+import { z} from "zod"
+import {sensorSchema} from "./sensor.schema"
 
 export const stationSchema = z.object({
     id: z.string(),

@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
 import { Sensor } from "../entities/sensor.entity"
-import { tSensorResponse } from "../interfaces/sensor.interface"
+import { tSensorDTO, tSensorResponse } from "../interfaces/sensor.interface"
 import { createSensorService } from "../services/sensor/create"
 import { getAllSensorsService, getSensorService } from "../services/sensor/get"
 
@@ -14,12 +14,12 @@ export const createSensorController = async (req: Request, res: Response): Promi
     const field6: any = req.query.field6
 
     const fieldList = [
-      {name: "Umidade", value: field1}, 
-      {name: "Temperatura", value: field2}, 
-      {name: "Pressão Relativa", value: field3}, 
-      {name: "Pressão Absoluta", value: field4}, 
-      {name: "PPM", value: field5}, 
-      {name: "Chuva", value: field6}
+      {name: "moisture", value: field1}, 
+      {name: "temperature", value: field2}, 
+      {name: "relativePressure", value: field3}, 
+      {name: "absolutePressure", value: field4}, 
+      {name: "ppm", value: field5}, 
+      {name: "rain", value: field6}
     ]
     
     for(let i = 0; i < 6; i++){
@@ -29,10 +29,10 @@ export const createSensorController = async (req: Request, res: Response): Promi
     return res.status(201).send()
 }
 
-export const getSensorController = async (req: Request, res: Response): Promise<Response<Sensor>> =>{
+export const getSensorController = async (req: Request, res: Response): Promise<Response<Sensor[]>> =>{
     const sensorName: string = req.params.name
 
-    const sensor: Sensor | null = await getSensorService(sensorName)
+    const sensor: tSensorDTO[] = await getSensorService(sensorName)
 
     return res.status(200).json(sensor)
 }
